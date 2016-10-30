@@ -1,0 +1,5 @@
+name: Return
+version: ${project.version}
+#website:
+author: RoboMWM
+main: to.us.tf.Return.Return
