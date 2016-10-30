@@ -63,6 +63,7 @@ public class Return extends JavaPlugin implements Listener
                 if (hi.isEmpty())
                 {
                     this.cancel();
+                    return;
                 }
 
                 player.sendMessage(hi.remove());
