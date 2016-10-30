@@ -20,7 +20,6 @@ import java.util.Queue;
  */
 public class Return extends JavaPlugin implements Listener
 {
-    Title yURHere;
     List<String> messages = new ArrayList<>();
     public void onEnable()
     {
@@ -34,17 +33,12 @@ public class Return extends JavaPlugin implements Listener
                         player.kickPlayer("Attempting to reconnect you to MLG Fortress");
             }
         }.runTaskTimer(this, 120L * 20L, 30L * 20L);
-        Title.Builder builder = new Title.Builder();
-        builder.title("MLG Fortress is");
-        builder.subtitle("restarting, or is down");
-        builder.stay(20 * 300);
-        yURHere = builder.build();
         messages.add("MLG Fortress is either down or restarting.");
-        messages.add("Please use /rejoin to attempt a reconnect, or simply wait while we automatically try to reconnect for you.");
+        messages.add(ChatColor.GOLD + "Please use /rejoin to attempt a reconnect, or simply wait while we automatically try to reconnect for you.");
         messages.add("Feel free to spam that command if you wish to.");
         messages.add("");
         messages.add("Also, you can join us in IRC chat if the server is down.");
-        messages.add("Just click the chat tile at " + ChatColor.BLUE + ChatColor.UNDERLINE + "http://techfort.us.to");
+        messages.add("Just click the chat tile at " + ChatColor.AQUA + ChatColor.UNDERLINE + "http://techfort.us.to");
     }
 
     @EventHandler
@@ -53,6 +47,7 @@ public class Return extends JavaPlugin implements Listener
         if (event.getPlayer().isOp())
             return;
         event.getPlayer().kickPlayer("Attempting to reconnect you to MLG Fortress");
+        event.getPlayer().sendMessage(ChatColor.AQUA + "" + ChatColor.UNDERLINE + "http://techfort.us.to");
         event.setCancelled(true);
     }
 
@@ -67,13 +62,12 @@ public class Return extends JavaPlugin implements Listener
             {
                 if (hi.isEmpty())
                 {
-                    player.sendTitle(yURHere);
                     this.cancel();
                 }
 
                 player.sendMessage(hi.remove());
             }
-        }.runTaskTimer(this, 60L, 40L);
+        }.runTaskTimer(this, 80L, 60L);
         event.setJoinMessage(null);
     }
 }
