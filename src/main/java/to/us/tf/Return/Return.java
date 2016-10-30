@@ -10,12 +10,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * Created by RoboMWM on 10/29/2016.
  */
 public class Return extends JavaPlugin implements Listener
 {
     Title yURHere;
+    List<String> messages = new ArrayList<>();
     public void onEnable()
     {
         getServer().getPluginManager().registerEvents(this, this);
@@ -31,8 +37,14 @@ public class Return extends JavaPlugin implements Listener
         Title.Builder builder = new Title.Builder();
         builder.title("MLG Fortress is");
         builder.subtitle("restarting, or is down");
-        builder.stay(20 * 10);
+        builder.stay(20 * 300);
         yURHere = builder.build();
+        messages.add("MLG Fortress is either down or restarting.");
+        messages.add("Please use /rejoin to attempt a reconnect, or simply wait while we automatically try to reconnect for you.");
+        messages.add("Feel free to spam that command if you wish to.");
+        messages.add("");
+        messages.add("Also, you can join us in IRC chat if the server is down.");
+        messages.add("Just click the chat tile at " + ChatColor.BLUE + ChatColor.UNDERLINE + "http://techfort.us.to");
     }
 
     @EventHandler
@@ -48,12 +60,20 @@ public class Return extends JavaPlugin implements Listener
     void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
-        player.sendTitle(yURHere);
-        player.sendMessage("MLG Fortress is either down or restarting.");
-        player.sendMessage("Please use /rejoin to attempt a reconnect, or simply wait while we automatically try to reconnect for you.");
-        player.sendMessage("Feel free to spam that command if you wish to.");
-        player.sendMessage("");
-        player.sendMessage("Also, you can join us in IRC chat if the server is down.");
-        player.sendMessage("Just click the chat tile at " + ChatColor.BLUE + ChatColor.UNDERLINE + "http://techfort.us.to");
+        new BukkitRunnable()
+        {
+            Queue<String> hi = new LinkedList<>(messages);
+            public void run()
+            {
+                if (hi.isEmpty())
+                {
+                    player.sendTitle(yURHere);
+                    this.cancel();
+                }
+
+                player.sendMessage(hi.remove());
+            }
+        }.runTaskTimer(this, 60L, 40L);
+        event.setJoinMessage(null);
     }
 }
